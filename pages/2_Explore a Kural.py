@@ -9,10 +9,11 @@ import warnings
 warnings.filterwarnings("ignore")
 main_page = __import__("Home Page")
 
+api_key = st.secrets["HUGGINGFACEHUB_API_TOKEN"]
 
 repo_id = "mistralai/Mistral-7B-Instruct-v0.2"
 llm = HuggingFaceEndpoint(
-    repo_id=repo_id, max_length=128, temperature=0.6
+    repo_id=repo_id, max_length=128, temperature=0.6, token=api_key
 )
 template = """{question}: {kural}
 Answer: """
