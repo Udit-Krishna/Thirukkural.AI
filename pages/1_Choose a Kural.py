@@ -2,7 +2,7 @@ import streamlit as st
 import sqlite3
 import re
 from streamlit.components.v1 import components
-main_page = __import__("Home Page")
+main_page = __import__("HomePage")
 
 
 def get_chapters():

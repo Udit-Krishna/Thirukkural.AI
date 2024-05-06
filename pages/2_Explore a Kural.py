@@ -7,7 +7,7 @@ from langchain.chains import LLMChain
 from langchain_core.prompts import PromptTemplate
 import warnings
 warnings.filterwarnings("ignore")
-main_page = __import__("Home Page")
+main_page = __import__("HomePage")
 
 api_key = st.secrets["HUGGINGFACEHUB_API_TOKEN"]
 
