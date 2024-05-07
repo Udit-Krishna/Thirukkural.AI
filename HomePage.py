@@ -1,7 +1,21 @@
 import streamlit as st
+import re
 import datetime
 import sqlite3
 import random
+from langchain_community.vectorstores import FAISS
+from langchain.chains.question_answering import load_qa_chain
+from langchain_community.embeddings import HuggingFaceEmbeddings
+from langchain_community.llms import HuggingFaceEndpoint
+from dotenv import load_dotenv
+import warnings
+warnings.filterwarnings("ignore")
+load_dotenv()
+
+repo_id = "mistralai/Mistral-7B-Instruct-v0.2"
+llm = HuggingFaceEndpoint(
+    repo_id=repo_id, max_length=128, temperature=0.4
+)
 
 st.set_page_config(page_title="Thirukkural.AI", layout="wide")
 
@@ -37,6 +51,29 @@ def kural_for_the_day():
         conn.commit()
         return kural_for_the_day()
 
+def kural_search(user_question):
+    embeddings = HuggingFaceEmbeddings()
+    knowledge_base = FAISS.load_local("kural_faiss_index", embeddings, allow_dangerous_deserialization=True)
+
+    with open("thirukkural.txt","r", encoding="utf8")as f:
+        text_tamil = f.readlines()
+    for i in range(len(text_tamil)):
+        text_tamil[i] = re.sub(r" +", " ", text_tamil[i])
+        text_tamil[i] = re.sub(r"[\\n|$]", " ", text_tamil[i]).strip()[:-1]
+    with open("thirukkural_eng.txt","r", encoding="utf8")as f:
+        text = f.readlines()
+    for i in range(len(text)):
+        text[i] = re.sub(r"[\n|$]", " ", text[i]).strip()
+        text[i] = re.sub(r" +", " ", text[i])
+    
+    search_results = []
+    docs = knowledge_base.similarity_search(user_question, k=3)
+    for line in docs:
+        search_results.append([text.index(line.page_content)+1, text_tamil[text.index(line.page_content)], text[text.index(line.page_content)]])
+    
+    chain = load_qa_chain(llm, chain_type="stuff")
+    response = chain.run(input_documents=docs, question="In a simple and detailed manner, what is given in the text about "+user_question+"? Refer to the text as 'Thirukkural' only and no other nouns like text or document. The name of the author or speaker of the text is called 'Thiruvalluvar' and refer to him only by his name with the correct spelling and no other terms like author or speaker. Do not make up any numbers for chapters")
+    return search_results, response
 
 def main():
     with st.sidebar:
@@ -50,16 +87,43 @@ def main():
 
     st.title("Thirukkural.AI")
     st.write("#### A Mistral 7B based chat bot to explore Thirukkural")
-    kural = kural_for_the_day()
-    kural_today = kural[2].split()
-    st.divider()
+    st.write("")
+    kural_t = kural_for_the_day()
+    kural_today = kural_t[2].split()
+    
     with st.container(border=True):
+        col1, col2, col3 = st.columns([0.55, 0.35, 0.1])
+        col1.write("<h3>What does the Thirukkural say about</h3> ", unsafe_allow_html=True)
+        user_question = col2.text_input("Enter a topic", label_visibility='collapsed').capitalize()
+        if col3.button("Search") or user_question:
+            col2.write("<br>", unsafe_allow_html=True)
+            if '?' in user_question:
+                user_question = user_question.replace('?','')
+            response = kural_search(user_question)
+            col3_1, col3_2 = st.columns([0.5, 0.5], gap="large")
+            col3_1.write(response[1])
+            col3_2.write("This explanation was based on the following")
+            for kural_now in response[0]:
+                with col3_2.expander("குறள் "+str(kural_now[0])):
+                    kural = kural_now[1].split()
+                    st.write(f"{' '.join(kural[:4])}<br>{' '.join(kural[4:])}", unsafe_allow_html=True)
+                    st.write(kural_now[2])
+                    if st.button("Explore", key=kural_now[0]):
+                        st.session_state["kural"] = kural_now[0]
+                        if "messages" in st.session_state.keys():
+                            del st.session_state.messages
+                        st.switch_page("pages/2_Explore a Kural.py")
+        else:
+            st.caption("Suggested queries: family, love, education, marriage, respecting elders, qualities of a man, qualities of a woman, relationship between husband and wife")
+
+    with st.container():
+        st.write()
         col1, col2 = st.columns(spec=[0.6,0.4], gap="large")
         col1.subheader("Featured குறள் of the day:")
         col1.write(f"{' '.join(kural_today[:4])}<br>{' '.join(kural_today[4:])}", unsafe_allow_html=True)
-        col1.write(f"<b>English Meaning:</b> {kural[3]}", unsafe_allow_html=True)
-        col2.metric("குறள்",kural[0])
-        col2.write(f"அதிகாரம் <br><h5>{kural[1]}</h5>", unsafe_allow_html=True)
+        col1.write(f"<b>English Meaning:</b> {kural_t[3]}", unsafe_allow_html=True)
+        col2.metric("குறள்",kural_t[0])
+        col2.write(f"அதிகாரம் <br><h5>{kural_t[1]}</h5>", unsafe_allow_html=True)
         if col2.button("Explore this kural using the chatbot", key="kural_for_the_day"):
             st.session_state["kural"] = int(kural_for_the_day()[0])
             if "messages" in st.session_state.keys():

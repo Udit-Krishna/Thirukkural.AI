@@ -2,3 +2,4 @@ pandas
 streamlit
 sentence_transformers
 langchain
+faiss-cpu
