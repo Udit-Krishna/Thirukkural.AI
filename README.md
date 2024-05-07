@@ -1,12 +1,7 @@
 # Thirukkural.AI
 
-Thirukkural.AI is an innovative chatbot deployed using Streamlit, designed to provide an immersive experience in exploring ancient wisdom and discovering new insights.
-This chatbot allows you to delve into the timeless wisdom of thirukkural, providing a unique platform to learn and explore.
+Welcome to Thirukkural.AI, your gateway to the timeless wisdom of Thiruvalluvar powered by cutting-edge AI technology and deployed using Streamlit. This is a chatbot designed to help you delve into the profound teachings of Thiruvalluvar.
 <br><br>
-With Mistral 7B model, you can uncover the depths of specific kural, gaining a deeper understanding of their meanings and relevance.
-Whether you're a scholar seeking profound insights or a curious mind eager to learn, this chatbot is here to guide you on your journey of discovery.
+With Thirukkural.AI, you can easily find what Thiruvalluvar has said about any topic using RAG (Retrieval-Augmented Generation) model made specifically using the vectors of each kural. Simply enter a keyword, and let Thirukkural.AI uncover the relevant kural for you.
 <br><br>
-Not only does Thirukkural.AI help you explore individual kural, but it also offers suggestions for similar kural based on advanced sentence transformers.
-This feature lets you expand your knowledge and discover related kural that resonate with your interests and inquiries.
-<br><br>
-Let's unlock the timeless truths of kural together!
+But that's not all... Thirukkural.AI goes beyond mere exploration. It allows you to delve deeper into a specific kural, providing insights and interpretations using Mistral 7B powered chat bot. Want more? Explore similar kural suggestions based on advanced sentence transformers, expanding your understanding and appreciation of Thiruvalluvar's timeless wisdom.
