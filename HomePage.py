@@ -28,7 +28,7 @@ def kural_for_the_day():
         conn.commit()
         return kural_for_the_day()
     else:
-        cursor.execute("DELETE * FROM day")
+        cursor.execute("DROP TABLE day")
         conn.commit()
         cursor.execute("CREATE TABLE day(id INTEGER, date TEXT)")
         conn.commit()
