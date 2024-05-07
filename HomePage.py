@@ -10,10 +10,10 @@ from langchain_community.llms import HuggingFaceEndpoint
 import warnings
 warnings.filterwarnings("ignore")
 
-
+api_key = st.secrets["HUGGINGFACEHUB_API_TOKEN"]
 repo_id = "mistralai/Mistral-7B-Instruct-v0.2"
 llm = HuggingFaceEndpoint(
-    repo_id=repo_id, max_length=128, temperature=0.4
+    repo_id=repo_id, max_length=128, temperature=0.4, token=api_key
 )
 
 st.set_page_config(page_title="Thirukkural.AI", layout="wide")
