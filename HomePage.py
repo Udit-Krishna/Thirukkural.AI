@@ -83,10 +83,11 @@ def main():
                 del st.session_state.messages
             st.switch_page("pages/2_Explore a Kural.py")
 
-
-    st.title("Thirukkural.AI")
-    st.write("#### A Mistral 7B based chat bot to explore Thirukkural")
-    st.write("")
+    head_1, head_2 = st.columns([0.8,0.2])
+    head_1.title("Thirukkural.AI")
+    head_1.write("#### Explore Thirukkural with the help of AI")
+    head_1.write("")
+    head_2.image("thiruvalluvar.png")
     kural_t = kural_for_the_day()
     kural_today = kural_t[2].split()
     
