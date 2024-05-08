@@ -15,8 +15,10 @@ repo_id = "mistralai/Mistral-7B-Instruct-v0.2"
 llm = HuggingFaceEndpoint(
     repo_id=repo_id, max_length=128, temperature=0.6, token=api_key
 )
-template = """{question}: {kural}
-Answer: """
+template = """Prompt: Don't be too verbose. Always answer with respect to the given kural. Try not to repeat the given words and use simple and easy-to-understand words. The given kural is from Thirukkural written by Thiruvalluvar. You may refer it as kural only. Don't produce unwanted words and answer like a human without any ai bullshit. Avoid answering if the given question is not related to the given kural.
+Question: {question}
+kural:  {kural}
+Answer:"""
 prompt = PromptTemplate.from_template(template)
 llm_chain = LLMChain(prompt=prompt, llm=llm)
 
