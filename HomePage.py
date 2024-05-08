@@ -8,6 +8,7 @@ from langchain.chains.question_answering import load_qa_chain
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_community.llms import HuggingFaceEndpoint
 import warnings
+from PIL import Image
 warnings.filterwarnings("ignore")
 
 api_key = st.secrets["HUGGINGFACEHUB_API_TOKEN"]
@@ -87,7 +88,8 @@ def main():
     head_1.title("Thirukkural.AI")
     head_1.write("#### Explore Thirukkural with the help of AI")
     head_1.write("")
-    head_2.image("thiruvalluvar.png")
+    image = Image.open("thiruvalluvar.png")
+    head_2.image(image)
     kural_t = kural_for_the_day()
     kural_today = kural_t[2].split()
     
