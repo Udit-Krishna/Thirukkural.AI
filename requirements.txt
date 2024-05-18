@@ -2,5 +2,6 @@ pandas
 streamlit
 sentence_transformers
 langchain
+langchain_community
 faiss-cpu
 pillow
