@@ -8,9 +8,23 @@ But that's not all... Thirukkural.AI goes beyond mere exploration. It allows you
 
 ---
 
-## Overview
+# Overview
 
 - Leveraged Mistral 7B Instruct model using the HuggingFace inference API, specifically prompt-engineered for this
 application, to explore the profound teachings of Thirukkural.
 - Implemented Retrieval Augmented Generation to retrieve relevant lines from the book according to the user query.
 - Utilized a Vector database to store the embedding of each couplet and to develop a Recommender system.
+
+---
+
+# How to Run?
+
+1. Install all the dependencies
+```bash
+pip install -r requirements.txt
+```
+
+2. Run Streamlit
+```bash
+python -m streamlit run HomePage.py
+```
