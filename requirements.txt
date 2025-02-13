@@ -1,7 +1,9 @@
 pandas
 streamlit
-sentence_transformers
+python-dotenv
+transformers
+tokenizers
+sentence-transformers==2.4.0
 langchain
-langchain_community
+langchain-community
 faiss-cpu
-pillow

@@ -8,13 +8,16 @@ from langchain.chains.question_answering import load_qa_chain
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_community.llms import HuggingFaceEndpoint
 import warnings
+import torch
 from PIL import Image
 warnings.filterwarnings("ignore")
 
 api_key = st.secrets["HUGGINGFACEHUB_API_TOKEN"]
+torch.classes.__path__ = []
+
 repo_id = "mistralai/Mistral-7B-Instruct-v0.2"
 llm = HuggingFaceEndpoint(
-    repo_id=repo_id, max_length=128, temperature=0.4, token=api_key
+    repo_id=repo_id, max_length=128, temperature=0.4, task='text-generation'
 )
 
 st.set_page_config(page_title="Thirukkural.AI", layout="wide")
